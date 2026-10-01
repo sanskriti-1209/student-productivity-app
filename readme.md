@@ -33,8 +33,6 @@ cd student-productivity-app
 
 3. Open `index.html` in your browser.
 
-Or, if you are using VS Code, you can use the **Live Server** extension to run the project.
-
 ## Project Structure
 
 ```text
@@ -43,7 +41,7 @@ student-productivity-app/
 ├── index.html
 ├── style.css
 ├── script.js
-└── README.md
+└── readme.md
 ```
 
 ## Purpose
