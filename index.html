@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyFlow — Student Productivity App</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <span class="brand-icon">📚</span>
+                    <h1>StudyFlow</h1>
+                </div>
+                <button class="sidebar-close" id="sidebarClose">✕</button>
+            </div>
+
+            <!-- Student Profile -->
+            <div class="profile-section">
+                <div class="avatar" id="avatarDisplay">S</div>
+                <div class="profile-info">
+                    <h3 id="profileName">Student</h3>
+                    <p id="profileCourse">Set up your profile</p>
+                </div>
+                <button class="edit-profile-btn" id="editProfileBtn" title="Edit Profile">⚙</button>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-view="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-item" data-view="tasks">
+                    <span class="nav-icon">✅</span>
+                    <span>Tasks</span>
+                    <span class="badge" id="taskBadge">0</span>
+                </button>
+                <button class="nav-item" data-view="schedule">
+                    <span class="nav-icon">📅</span>
+                    <span>Schedule</span>
+                </button>
+                <button class="nav-item" data-view="pomodoro">
+                    <span class="nav-icon">🍅</span>
+                    <span>Focus Timer</span>
+                </button>
+                <button class="nav-item" data-view="notes">
+                    <span class="nav-icon">📝</span>
+                    <span>Quick Notes</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="streak-widget">
+                    <span class="streak-fire">🔥</span>
+                    <div>
+                        <strong id="streakCount">0</strong> day streak
+                        <p class="streak-sub">Keep it going!</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Top Bar -->
+            <header class="topbar">
+                <button class="menu-toggle" id="menuToggle">☰</button>
+                <div class="topbar-info">
+                    <h2 id="viewTitle">Dashboard</h2>
+                    <p id="dateDisplay"></p>
+                </div>
+                <div class="topbar-actions">
+                    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">🌙</button>
+                </div>
+            </header>
+
+            <!-- Views -->
+            <div class="content">
+                <!-- Dashboard View -->
+                <section class="view active" id="view-dashboard">
+                    <div class="greeting" id="greetingSection">
+                        <h2 id="greetingText">Good morning! 👋</h2>
+                        <p>Here's your productivity overview</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card stat-total">
+                            <div class="stat-icon">📋</div>
+                            <div class="stat-info">
+                                <span class="stat-number" id="statTotal">0</span>
+                                <span class="stat-label">Total Tasks</span>
+                            </div>
+                        </div>
+                        <div class="stat-card stat-completed">
+                            <div class="stat-icon">✅</div>
+                            <div class="stat-info">
+                                <span class="stat-number" id="statCompleted">0</span>
+                                <span class="stat-label">Completed</span>
+                            </div>
+                        </div>
+                        <div class="stat-card stat-pending">
+                            <div class="stat-icon">⏳</div>
+                            <div class="stat-info">
+                                <span class="stat-number" id="statPending">0</span>
+                                <span class="stat-label">Pending</span>
+                            </div>
+                        </div>
+                        <div class="stat-card stat-focus">
+                            <div class="stat-icon">🍅</div>
+                            <div class="stat-info">
+                                <span class="stat-number" id="statFocusTime">0m</span>
+                                <span class="stat-label">Focus Today</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="dash-card">
+                            <h3>📌 Today's Tasks</h3>
+                            <div class="today-tasks" id="todayTasks">
+                                <p class="empty-msg">No tasks for today</p>
+                            </div>
+                        </div>
+                        <div class="dash-card">
+                            <h3>📈 Weekly Progress</h3>
+                            <div class="weekly-chart" id="weeklyChart"></div>
+                        </div>
+                        <div class="dash-card">
+                            <h3>🎯 Upcoming Deadlines</h3>
+                            <div class="upcoming-deadlines" id="upcomingDeadlines">
+                                <p class="empty-msg">No upcoming deadlines</p>
+                            </div>
+                        </div>
+                        <div class="dash-card">
+                            <h3>💡 Motivational Quote</h3>
+                            <div class="quote-section">
+                                <blockquote id="quoteText">"The secret of getting ahead is getting started."</blockquote>
+                                <p class="quote-author" id="quoteAuthor">— Mark Twain</p>
+                                <button class="btn btn-sm" id="newQuoteBtn">New Quote 🔄</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tasks View -->
+                <section class="view" id="view-tasks">
+                    <div class="tasks-header">
+                        <div class="tasks-filters">
+                            <button class="filter-btn active" data-filter="all">All</button>
+                            <button class="filter-btn" data-filter="today">Today</button>
+                            <button class="filter-btn" data-filter="week">This Week</button>
+                            <button class="filter-btn" data-filter="pending">Pending</button>
+                            <button class="filter-btn" data-filter="completed">Completed</button>
+                        </div>
+                        <button class="btn btn-primary" id="addTaskBtn">+ New Task</button>
+                    </div>
+
+                    <!-- Task Form -->
+                    <div class="task-form-container" id="taskFormContainer" style="display:none">
+                        <div class="task-form">
+                            <h3 id="taskFormTitle">Add New Task</h3>
+                            <div class="form-row">
+                                <div class="form-group full">
+                                    <label>Task Title *</label>
+                                    <input type="text" id="taskTitle" class="input" placeholder="e.g., Complete Math Assignment">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <select id="taskCategory" class="input">
+                                        <option value="study">📖 Study</option>
+                                        <option value="assignment">📝 Assignment</option>
+                                        <option value="project">🔬 Project</option>
+                                        <option value="exam">📋 Exam Prep</option>
+                                        <option value="personal">🏠 Personal</option>
+                                        <option value="other">📎 Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Priority</label>
+                                    <select id="taskPriority" class="input">
+                                        <option value="low">🟢 Low</option>
+                                        <option value="medium" selected>🟡 Medium</option>
+                                        <option value="high">🔴 High</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Due Date</label>
+                                    <input type="date" id="taskDate" class="input">
+                                </div>
+                                <div class="form-group">
+                                    <label>Due Time</label>
+                                    <input type="time" id="taskTime" class="input">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group full">
+                                    <label>Description (optional)</label>
+                                    <textarea id="taskDesc" class="input textarea" placeholder="Add details..." rows="2"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button class="btn btn-secondary" id="cancelTaskBtn">Cancel</button>
+                                <button class="btn btn-primary" id="saveTaskBtn">Save Task</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Task List -->
+                    <div class="task-list" id="taskList">
+                        <div class="empty-state-large">
+                            <span class="empty-icon">📝</span>
+                            <h3>No tasks yet</h3>
+                            <p>Click "+ New Task" to get started!</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Schedule View (Daily/Weekly) -->
+                <section class="view" id="view-schedule">
+                    <div class="schedule-header">
+                        <div class="schedule-toggle">
+                            <button class="sched-btn active" data-sched="daily">Daily</button>
+                            <button class="sched-btn" data-sched="weekly">Weekly</button>
+                        </div>
+                        <div class="schedule-nav">
+                            <button class="btn btn-sm" id="schedPrev">◀</button>
+                            <span id="schedDateLabel">Today</span>
+                            <button class="btn btn-sm" id="schedNext">▶</button>
+                            <button class="btn btn-sm" id="schedToday">Today</button>
+                        </div>
+                    </div>
+
+                    <div class="schedule-content" id="scheduleContent">
+                        <!-- Daily View -->
+                        <div class="daily-schedule" id="dailySchedule"></div>
+                        <!-- Weekly View -->
+                        <div class="weekly-schedule" id="weeklySchedule" style="display:none"></div>
+                    </div>
+                </section>
+
+                <!-- Pomodoro Timer View -->
+                <section class="view" id="view-pomodoro">
+                    <div class="pomodoro-container">
+                        <div class="timer-card">
+                            <div class="timer-modes">
+                                <button class="timer-mode active" data-minutes="25">Focus (25m)</button>
+                                <button class="timer-mode" data-minutes="5">Short Break (5m)</button>
+                                <button class="timer-mode" data-minutes="15">Long Break (15m)</button>
+                            </div>
+
+                            <div class="timer-display">
+                                <svg class="timer-ring" viewBox="0 0 200 200">
+                                    <circle class="timer-ring-bg" cx="100" cy="100" r="90"/>
+                                    <circle class="timer-ring-progress" cx="100" cy="100" r="90" id="timerRing"/>
+                                </svg>
+                                <div class="timer-text">
+                                    <span id="timerMinutes">25</span>:<span id="timerSeconds">00</span>
+                                </div>
+                            </div>
+
+                            <div class="timer-controls">
+                                <button class="btn btn-primary btn-lg" id="timerStartBtn">▶ Start</button>
+                                <button class="btn btn-secondary btn-lg" id="timerResetBtn">⟳ Reset</button>
+                            </div>
+
+                            <div class="timer-task">
+                                <label>Working on:</label>
+                                <select id="timerTaskSelect" class="input">
+                                    <option value="">Select a task (optional)</option>
+                                </select>
+                            </div>
+
+                            <div class="pomodoro-stats">
+                                <div class="pomo-stat">
+                                    <strong id="pomoCount">0</strong>
+                                    <span>Pomodoros Today</span>
+                                </div>
+                                <div class="pomo-stat">
+                                    <strong id="pomoTotalTime">0m</strong>
+                                    <span>Focus Time</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ambient-sounds">
+                            <h3>🎵 Ambient Sounds</h3>
+                            <div class="sound-grid">
+                                <button class="sound-btn" data-sound="none">🔇 None</button>
+                                <button class="sound-btn" data-sound="rain">🌧️ Rain</button>
+                                <button class="sound-btn" data-sound="forest">🌲 Forest</button>
+                                <button class="sound-btn" data-sound="cafe">☕ Café</button>
+                            </div>
+                            <p class="sound-note">🔊 Sound plays during focus sessions (browser audio)</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Notes View -->
+                <section class="view" id="view-notes">
+                    <div class="notes-header">
+                        <input type="text" id="noteSearch" class="input" placeholder="🔍 Search notes...">
+                        <button class="btn btn-primary" id="addNoteBtn">+ New Note</button>
+                    </div>
+
+                    <div class="notes-grid" id="notesGrid">
+                        <div class="empty-state-large">
+                            <span class="empty-icon">📝</span>
+                            <h3>No notes yet</h3>
+                            <p>Click "+ New Note" to create one!</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal">
+            <h3>👤 Student Profile</h3>
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="profileNameInput" class="input" placeholder="Your name">
+            </div>
+            <div class="form-group">
+                <label>Course / Major</label>
+                <input type="text" id="profileCourseInput" class="input" placeholder="e.g., Computer Science">
+            </div>
+            <div class="form-group">
+                <label>Year</label>
+                <select id="profileYear" class="input">
+                    <option value="1st Year">1st Year</option>
+                    <option value="2nd Year">2nd Year</option>
+                    <option value="3rd Year">3rd Year</option>
+                    <option value="4th Year">4th Year</option>
+                    <option value="Graduate">Graduate</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Daily Goal (tasks)</label>
+                <input type="number" id="profileGoal" class="input" value="5" min="1" max="50">
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-secondary" id="closeProfileModal">Cancel</button>
+                <button class="btn btn-primary" id="saveProfileBtn">Save Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Note Modal -->
+    <div class="modal-overlay" id="noteModal">
+        <div class="modal modal-lg">
+            <h3 id="noteModalTitle">New Note</h3>
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" id="noteTitle" class="input" placeholder="Note title...">
+            </div>
+            <div class="form-group">
+                <label>Color</label>
+                <div class="note-colors">
+                    <div class="note-color selected" data-color="#fff9c4" style="background:#fff9c4"></div>
+                    <div class="note-color" data-color="#f8bbd0" style="background:#f8bbd0"></div>
+                    <div class="note-color" data-color="#c8e6c9" style="background:#c8e6c9"></div>
+                    <div class="note-color" data-color="#bbdefb" style="background:#bbdefb"></div>
+                    <div class="note-color" data-color="#e1bee7" style="background:#e1bee7"></div>
+                    <div class="note-color" data-color="#ffe0b2" style="background:#ffe0b2"></div>
+                    <div class="note-color" data-color="#ffffff" style="background:#ffffff;border:1px solid #ddd"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Content</label>
+                <textarea id="noteContent" class="input textarea" rows="8" placeholder="Write your note..."></textarea>
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-secondary" id="closeNoteModal">Cancel</button>
+                <button class="btn btn-danger" id="deleteNoteBtn" style="display:none">Delete</button>
+                <button class="btn btn-primary" id="saveNoteBtn">Save Note</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
